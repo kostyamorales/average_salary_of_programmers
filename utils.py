@@ -31,7 +31,7 @@ def print_table(statistics, title):
 
 
 def get_language_statistic_hh(vacancies_found, pages, params):
-    language_statistics = {
+    language_statistic = {
         'vacancies_found': vacancies_found,
         'vacancies_processed': 0,
         'average_salary': 0
@@ -58,16 +58,16 @@ def get_language_statistic_hh(vacancies_found, pages, params):
             average_salary = 0
             if vacancies_processed > 0:
                 average_salary = int(salary_sum // vacancies_processed)
-            language_statistics = {
+            language_statistic = {
                 'vacancies_found': vacancies_found,
                 'vacancies_processed': vacancies_processed,
                 'average_salary': average_salary
             }
-    return language_statistics
+    return language_statistic
 
 
 def get_language_statistic_sj(vacancies_found, pages, params, headers):
-    language_statistics = {
+    language_statistic = {
         'vacancies_found': vacancies_found,
         'vacancies_processed': 0,
         'average_salary': 0
@@ -93,9 +93,9 @@ def get_language_statistic_sj(vacancies_found, pages, params, headers):
             average_salary = 0
             if vacancies_processed > 0:
                 average_salary = int(salary_sum // vacancies_processed)
-            language_statistics = {
+            language_statistic = {
                 'vacancies_found': vacancies_found,
                 'vacancies_processed': vacancies_processed,
                 'average_salary': average_salary
             }
-    return language_statistics
+    return language_statistic
