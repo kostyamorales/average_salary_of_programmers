@@ -3,10 +3,6 @@ import requests
 
 
 def predict_rub_salary(salary_from, salary_to):
-    if not salary_from:
-        salary_from = None
-    if not salary_to:
-        salary_to = None
     if salary_from and salary_to:
         average_salary = (salary_from + salary_to) / 2
         return average_salary
@@ -18,14 +14,14 @@ def predict_rub_salary(salary_from, salary_to):
         return average_salary
 
 
-def print_table(statistics, title):
+def print_table(statistic, title):
     rows_table = [
         ['Язык программирования', 'Вакансий найдено', 'Вакансий обработано', 'Средняя зарплата']
     ]
-    for language in statistics:
+    for language, rows in statistic.items():
         rows_table.append(
-            [language, statistics[language]['vacancies_found'], statistics[language]['vacancies_processed'],
-             statistics[language]['average_salary']])
+            [language, rows['vacancies_found'], rows['vacancies_processed'],
+             rows['average_salary']])
     table = AsciiTable(rows_table, title)
     print(table.table)
 
