@@ -1,12 +1,11 @@
 import requests
-from utils import create_table, get_statistics
+from utils import print_table, get_language_statistic_hh, get_language_statistic_sj
 from os import getenv
 from dotenv import load_dotenv
 
 
-def get_statistics_hh(languages):
-    statistics = {}
-    place = 'hh'
+def get_statistic_hh(languages):
+    statistic = {}
     for language in languages:
         params = {
             'area': 1,
@@ -20,17 +19,16 @@ def get_statistics_hh(languages):
         vacancies_found = response.json()['found']
         pages = response.json()['pages']
         params['only_with_salary'] = True
-        language_statistics = get_statistics(place, vacancies_found, url, pages, params)
-        statistics[language] = language_statistics
-    return statistics
+        language_statistic = get_language_statistic_hh(vacancies_found, pages, params)
+        statistic[language] = language_statistic
+    return statistic
 
 
-def get_statistics_sj(languages):
-    statistics = {}
-    place = 'sj'
+def get_statistic_sj(languages, api_key):
+    statistic = {}
     for language in languages:
         headers = {
-            'X-Api-App-Id': getenv('SJ_API_KEY')
+            'X-Api-App-Id': api_key
         }
         params = {
             'keyword': f'программист {language}',
@@ -43,14 +41,13 @@ def get_statistics_sj(languages):
         response.raise_for_status()
         vacancies_found = response.json()['total']
         pages = vacancies_found // 100
-        language_statistics = get_statistics(place, vacancies_found, url, pages, params, headers)
-        statistics[language] = language_statistics
-    return statistics
+        language_statistic = get_language_statistic_sj(vacancies_found, pages, params, headers)
+        statistic[language] = language_statistic
+    return statistic
 
 
 if __name__ == '__main__':
     load_dotenv()
-
     programming_languages = [
         'JavaScript',
         'Java',
@@ -67,8 +64,8 @@ if __name__ == '__main__':
         'Swift',
         'TypeScript'
     ]
-
-    hh_statistics = get_statistics_hh(programming_languages)
-    sj_statistics = get_statistics_sj(programming_languages)
-    create_table(hh_statistics, 'HeadHunter')
-    create_table(sj_statistics, 'SuperJob')
+    sj_api_key = getenv('SJ_API_KEY')
+    hh_statistic = get_statistic_hh(programming_languages)
+    sj_statistic = get_statistic_sj(programming_languages, sj_api_key)
+    print_table(hh_statistic, 'HeadHunter')
+    print_table(sj_statistic, 'SuperJob')
